@@ -1,2 +1,3 @@
-# reviews-service
-service for reviews component
+# location-map-service
+
+First commit

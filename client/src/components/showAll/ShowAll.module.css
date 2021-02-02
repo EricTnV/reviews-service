@@ -1,0 +1,189 @@
+.modal {
+  position: fixed;
+  border-radius: 5px;
+  z-index: 500;
+  background-color: rgb(255, 255, 255);
+  color: var(--polar1);
+  width: 80%;
+
+  box-shadow:rgba(0,0,0,.28);
+  padding: 16px;
+  left: 10%;
+  top: 5%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  transition: all 0.3s ease-out;
+  overflow-y: auto !important;
+}
+
+@media (min-width: 600px) {
+  .modal {
+    max-height: calc(100vh - 100px);
+    left: calc(50%-100px);
+    box-shadow:rgba(0,0,0,.28);
+    padding: 40px !important;
+    align-items: center !important;
+
+  }
+}
+
+.modalBody{
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll !important;
+}
+
+.something{
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+
+}
+
+.modalHeader{
+  background-color: rgb(255, 255, 255) !important;
+  padding-bottom: 24px !important;
+  position: sticky !important;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  font-size: 32px !important;
+  line-height: 36px !important;
+  color: rgb(34, 34, 34) !important;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  width: 100%
+
+}
+
+.star{
+  color: #FF385C;
+  font-size: 2.0rem;
+}
+
+.rating{
+  font-size: 3.0rem;
+  font-family: "Helvetica Neue" !important;
+
+}
+
+.exitBtn{
+  font-size: 1.7rem;
+}
+
+.modalContainer{
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  flex: 1 1 auto !important;
+  overflow: hidden !important;
+  padding: 24px !important;
+  border: 1px solid black
+}
+
+
+.exitBar{
+  flex: 0 0 72px !important;
+  position: sticky !important;
+  text-align: left !important;
+  top: 0px !important;
+}
+
+.searchBar{
+  width: 100% !important;
+  border: none !important;
+  outline: none !important;
+  margin: 0px 8px 0px 0px !important;
+  min-height: 1px !important;
+  color: rgb(34, 34, 34) !important;
+  background-color: transparent !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 20px !important;
+  appearance: none !important;
+  flex: 1 1 0% !important;
+  padding: 0px !important;
+  text-overflow: ellipsis !important;
+  width: 1000px;
+
+}
+
+.searchBarContainer{
+    min-height: 1px !important;
+    position: relative !important;
+    width: 100% !important;
+    float: left !important;
+    position: relative !important;
+    cursor: text !important;
+    display: flex !important;
+    height: unset !important;
+    width: 100% !important;
+    margin: 0px !important;
+    border: none !important;
+    color: rgb(34, 34, 34) !important;
+    background-color: rgb(247, 247, 247) !important;
+    align-items: center !important;
+    padding: 12px 12px 12px 16px !important;
+    border-radius: 100px !important;
+    box-shadow: rgb(176, 176, 176) 0px 0px 0px 1px inset
+}
+
+.graphsAndButtonContainer{
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  min-height: 1px !important;
+  position: relative !important;
+  width: 40% !important;
+  float: left !important;
+}
+
+.graphsContainer{
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  min-height: 1px !important;
+  position: relative !important;
+  width: 100% !important;
+  float: left !important;
+}
+
+.buttonsContainer{
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  min-height: 1px !important;
+  position: relative !important;
+  width: 100% !important;
+  float: left !important;
+}
+
+.reviewsContainer{
+  margin-left: 20px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  min-height: 1px !important;
+  position: relative !important;
+  width: 60% !important;
+  float: right !important;
+
+}
+
+.starAndText{
+  display: flex;
+  flex-direction: row;
+  width:90%;
+
+}
+
+.listDescription{
+  font-weight: 600 !important;
+  margin-bottom: 24px;
+}
+
+.highlighter{
+  background-color:#FFFF00;
+}
+
+

@@ -1,0 +1,81 @@
+.baseBar{
+  align-self: flex-end;
+  height: 5px;
+  width: 100px;
+  border-radius:10px;
+  background: #929494
+}
+
+.filler {
+  background: #040e0d;
+  height: 100%;
+  border-radius: inherit;
+  transition: width .2s ease-in;
+}
+
+.rating{
+  padding: 10px;
+}
+
+.allGraphs{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content:space-around;
+  align-items: flex start;
+}
+
+.containerFull{
+  margin-bottom: 16px !important;
+  width: 41.6667% !important;
+  margin-right: 8.33333% !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+
+}
+
+.containerModal{
+  margin-bottom: 16px !important;
+  width: 100% !important;
+  margin-right: 8.33333% !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+
+}
+
+.item{
+  align-items: flex-start;
+}
+
+.indivGraph{
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+.ratingTitle{
+  align-self: flex-start;
+  vertical-align: center;
+  width: 100% !important;
+
+
+}
+
+.ratingNum{
+  align-self: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.ratingBar{
+  align-self: center;
+  padding-right: 20px;
+
+}
+.pushRight{
+    display: flex;
+  align-self: flex-end
+
+}
+
