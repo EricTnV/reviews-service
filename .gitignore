@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# one-time scripts
+imageLoader.js
+schema.sql
+
+# images
+database/images
