@@ -16,13 +16,14 @@ const rowCount = 10;
 /* CHANGE THIS --V-- TO MAKE MORE USERS */
 const userCount = 800000;
 
-/* THE FOLLOWING SET THE FORMAT FOR THE VARIOUS IDS USED THROUGHOUT THE GENERATION  */
+/* THESE WILL GIVE A CONSISTENT FORMAT TO THE IDS THAT FLEXES */
+
 const userFormat = '0'.repeat(String(userCount).length);
 const fileFormat = '0'.repeat(String(fileCount).length);
 const listingFormat = '0'.repeat(String(fileCount * rowCount).length);
 const reviewFormat = '0'.repeat(String(fileCount * rowCount).length + 1);
 
-/* THE FOLLOWING ARE THE BASE VALUES GIVEN TO REVIEWS/RATINGS */
+/* OTHER REQUIRED DECLARATIONS */
 
 const categories = ['Responsive host', 'Great location', 'Helpful host', 'Comfortable beds', 'Easy check-in', 'Great views', 'A quiet neighborhood', 'Central location', 'Thoughtful touches', 'Friendly host', 'Great restaurants'];
 
@@ -73,6 +74,7 @@ const generateReviews = (count, listing_id) => {
 
 /* GENERATE USERS: THE FIRST OF TWO INDEPENDENT DATA GENERATION SCRIPTS */
 
+// eslint-disable-next-line no-unused-vars
 const generateUsers = () => {
   const ws = fs.createWriteStream(`${directory}/users.csv`);
   ws.write('user_id, firstName, lastName, email, profileUrl, pictureUrl, password\n', 'utf-8');
@@ -94,6 +96,7 @@ const generateUsers = () => {
 /* GENERATE LISTINGS: THE SECOND OF TWO INDEPENDENT DATA GENERATION SCRIPTS
   ^^^^^^^^REMEBER TO GENERATE USERS FIRST ^^^^^^^ */
 
+// eslint-disable-next-line no-unused-vars
 const generateListings = (i) => {
   // FILE SUFFIX NEEDED FOR WRITE STREAMS
   const fileSuffix = setFormat(fileFormat, i);

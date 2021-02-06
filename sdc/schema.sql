@@ -38,12 +38,12 @@ TERTIARY RECORDS (THIS IS WHAT MY PRIMARY AND SECONDARY RECORDS NEED)
 
 CREATE TABLE ratings(
   listing_id INTEGER FOREIGN KEY REFERENCES listing(listing_id),
-  cleanliness FLOAT,
-  communication FLOAT,
-  check_in FLOAT,
-  accuracy FLOAT,
-  location FLOAT,
-  value FLOAT,
+  cleanliness DECIMAL(2,1),
+  communication DECIMAL(2,1),
+  check_in DECIMAL(2,1),
+  accuracy DECIMAL(2,1),
+  location DECIMAL(2,1),
+  value DECIMAL(2,1),
 );
 
 CREATE TABLE categories(
