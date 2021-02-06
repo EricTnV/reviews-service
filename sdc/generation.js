@@ -8,10 +8,10 @@ const faker = require('faker');
 const directory = path.join(__dirname, 'sampleData');
 
 /* CHANGE THIS --V-- TO MAKE MORE LISTING FILES */
-const fileCount = 10;
+const fileCount = 100;
 
 /* CHANGE THIS --V-- TO MAKE MORE LISTING ROWS PER FILE */
-const rowCount = 10;
+const rowCount = 100000;
 
 /* CHANGE THIS --V-- TO MAKE MORE USERS */
 const userCount = 800000;
@@ -28,6 +28,7 @@ const reviewFormat = '0'.repeat(String(fileCount * rowCount).length + 1);
 const categories = ['Responsive host', 'Great location', 'Helpful host', 'Comfortable beds', 'Easy check-in', 'Great views', 'A quiet neighborhood', 'Central location', 'Thoughtful touches', 'Friendly host', 'Great restaurants'];
 
 let reviewIndex = 1;
+const listingIndex = 1;
 
 /* HELPER FUNCTIONS */
 
@@ -77,7 +78,7 @@ const generateReviews = (count, listing_id) => {
 // eslint-disable-next-line no-unused-vars
 const generateUsers = () => {
   const ws = fs.createWriteStream(`${directory}/users.csv`);
-  ws.write('user_id, firstName, lastName, email, profileUrl, pictureUrl, password\n', 'utf-8');
+  ws.write('user_id, firstName, lastName, profileUrl, pictureUrl\n', 'utf-8');
   for (let i = 1; i < userCount; i += 1) {
     const userId = setFormat(userFormat, i);
     const firstName = faker.name.firstName();
@@ -99,7 +100,7 @@ const generateUsers = () => {
 // eslint-disable-next-line no-unused-vars
 const generateListings = (i) => {
   // FILE SUFFIX NEEDED FOR WRITE STREAMS
-  const fileSuffix = setFormat(fileFormat, i);
+  const fileSuffix = `${setFormat(fileFormat, i + 1)}.csv`;
   // CREATE WRITE STREAMS FOR ALL FILES (-> FOR DISTINCT INSERTION TABLES)
   const listingsWS = fs.createWriteStream(`${directory}/listings${fileSuffix}`);
   listingsWS.write('listing_id, num_reviews, overall_rating_avg\n', 'utf-8');
@@ -113,11 +114,11 @@ const generateListings = (i) => {
   const ratingsWS = fs.createWriteStream(`${directory}/ratings${fileSuffix}`);
   ratingsWS.write('review_id, cleanliness, communication, check_in, accuracy, location, value\n', 'utf-8');
 
-  for (let j = 1; j < rowCount; j += 1) {
-    const listing_id = setFormat(listingFormat, (i * rowCount + j));
+  for (let j = 1; j <= rowCount; j += 1) {
+    const listing_id = setFormat(listingFormat, i * rowCount + j);
     const num_review = Math.floor(Math.random() * 11) + 5;
 
-    const reviews = generateReviews(num_review, j, listing_id, fileSuffix);
+    const reviews = generateReviews(num_review, listing_id);
     for (let k = 0; k < reviews.length; k += 1) {
       reviewsWS.write(`${reviews[k]}\n`, 'utf-8');
     }
@@ -134,7 +135,7 @@ const generateListings = (i) => {
     overall_rating = Number.parseFloat(overall_rating / 6).toPrecision(2);
     listingsWS.write(`${listing_id},${num_review},${overall_rating}\n`, 'utf-8');
   }
-  console.log(`Completed ${i} loops so far`);
+  console.log(`Completed ${i + 1} loops so far`);
   ratingsWS.end();
   categoriesWS.end();
   reviewsWS.end();
@@ -145,7 +146,12 @@ const generateListings = (i) => {
 
 /* TOGGLE THE FOLLOWING (COMMENT/UNCOMMENT) TO GENERATE LISTINGS AND DEPENDENT OBJECTS WHEN RUNNING FILE */
 
-for (let i = 0; i < fileCount; i += 1) {
-  const message = generateListings(i);
-  console.log(message);
-}
+let loops = 0;
+setInterval(() => {
+  if (loops < fileCount) {
+    generateListings(loops);
+    loops += 1;
+  } else {
+    console.log('Done');
+  }
+}, 0.45 * rowCount);
