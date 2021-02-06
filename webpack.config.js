@@ -10,7 +10,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /sdc/, path.resolve(__dirname, './database/images/'), path.resolve(__dirname, './database/imageLoader.js')],
         use: 'babel-loader',
       },
       {
