@@ -1,3 +1,1 @@
-# location-map-service
-
-First commit
+# reviews-service
