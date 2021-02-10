@@ -105,6 +105,6 @@ dist
 
 # one-time scripts
 imageLoader.js
-
 # images
 database/images
+sdc/sampleData/*.*

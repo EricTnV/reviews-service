@@ -1,3 +1,4 @@
+/* eslint-disable func-style */
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
