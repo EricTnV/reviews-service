@@ -5,18 +5,19 @@ const fs = require('fs');
 const path = require('path');
 const faker = require('faker');
 
+/* SET TO THE MOUNT POINT FOR LOADING YOUR CSV INTO SQL */
 const directory = path.join(__dirname, 'sampleData');
 
-/* CHANGE THIS --V-- TO MAKE MORE LISTING FILES */
+/* CHANGE THIS --V-- FOR THE # OF LISTING (ET AL) FILES TO CREATE */
 const fileCount = 100;
 
-/* CHANGE THIS --V-- TO MAKE MORE LISTING ROWS PER FILE */
+/* CHANGE THIS --V-- FOR THE # OF ROWS PER FILE */
 const rowCount = 100000;
 
 /* CHANGE THIS --V-- TO MAKE MORE USERS */
 const userCount = 800000;
 
-/* THESE WILL GIVE A CONSISTENT FORMAT TO THE IDS THAT FLEXES */
+/* THESE WILL GIVE A CONSISTENT FORMAT TO THE IDS */
 
 const userFormat = '0'.repeat(String(userCount).length);
 const fileFormat = '0'.repeat(String(fileCount).length);
@@ -28,7 +29,6 @@ const reviewFormat = '0'.repeat(String(fileCount * rowCount).length + 1);
 const categories = ['Responsive host', 'Great location', 'Helpful host', 'Comfortable beds', 'Easy check-in', 'Great views', 'A quiet neighborhood', 'Central location', 'Thoughtful touches', 'Friendly host', 'Great restaurants'];
 
 let reviewIndex = 1;
-const listingIndex = 1;
 
 /* HELPER FUNCTIONS */
 
@@ -62,7 +62,7 @@ const generateReviews = (count, listing_id) => {
     const userIdRandomizer = Math.floor(Math.random() * userCount);
     const review_id = setFormat(reviewFormat, reviewIndex);
     const user_id = setFormat(userFormat, userIdRandomizer);
-    const bodyText = Math.round(Math.random()) ? faker.lorem.paragraph() : faker.lorem.paragraphs();
+    const bodyText = faker.lorem.paragraph();
     const entry_date = faker.date.past(null, lastDate);
     lastDate = entry_date;
     const categoryIndex = Math.floor(Math.random() * 11);
@@ -92,7 +92,7 @@ const generateUsers = () => {
 };
 
 /* TOGGLE THE FOLLOWING TO GENERATE USERS WHEN RUNNING FILE */
-/* generateUsers(); */
+generateUsers();
 
 /* GENERATE LISTINGS: THE SECOND OF TWO INDEPENDENT DATA GENERATION SCRIPTS
   ^^^^^^^^REMEBER TO GENERATE USERS FIRST ^^^^^^^ */
@@ -154,4 +154,4 @@ setInterval(() => {
   } else {
     console.log('Done');
   }
-}, 0.45 * rowCount);
+}, 0.08 * rowCount);

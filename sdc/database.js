@@ -1,10 +1,12 @@
-const { Client } = require('pg')
-const client = new Client()
+/* eslint-disable no-console */
+const { Client } = require('pg');
 
-await client.connect()
+const client = new Client();
+client.connect();
 
-const res = await client.query('SELECT $1::text as message', ['Hello world!'])
+const res = client.query('SELECT $1::text as message', ['Hello world!']);
 
-console.log(res.rows[0].message) // Hello world!
+res.then((results) => console.log(results.rows[0].message)) // Hello world!
+  .catch((err) => console.log(err));
 
-await client.end()
+client.end();
