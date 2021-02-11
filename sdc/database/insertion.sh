@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash <-- this file
 psql -U postgres -d erictnv -c "COPY reviews.users FROM '/var/lib/postgresql/erictnvData/users.csv' USING DELIMITERS ',' CSV HEADER"
 echo "users inserted"
 for x in $(ls | grep listings)
@@ -20,5 +20,5 @@ for x in $(ls | grep reviews)
 do
   psql -U postgres -d erictnv -c "COPY reviews.reviews FROM '/var/lib/postgresql/erictnvData/$x' USING DELIMITERS ',' CSV HEADER"
   echo "$x inserted"
-  sleep 20s
+  sleep 5s
 done

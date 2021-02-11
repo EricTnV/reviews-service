@@ -6,7 +6,7 @@ const path = require('path');
 const faker = require('faker');
 
 /* SET TO THE MOUNT POINT FOR LOADING YOUR CSV INTO SQL */
-const directory = path.join(__dirname, 'sampleData');
+const directory = path.join(__dirname, '..', 'sampleData');
 
 /* CHANGE THIS --V-- FOR THE # OF LISTING (ET AL) FILES TO CREATE */
 const fileCount = 100;
