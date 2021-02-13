@@ -12,7 +12,7 @@ app.use(compression());
 app.use(express.json());
 app.use(express.static(PUBLIC_DIR));
 app.use((req, res, next) => {
-  console.log(`${req.method} on locahost:${port} for ${req.path}/?propertyId=${req.params}`);
+  console.log(`${req.method} on locahost:${port} for ${req.path}`);
   next();
 });
 app.use('/api/rooms/', router);

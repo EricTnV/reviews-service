@@ -5,14 +5,11 @@ const fs = require('fs');
 const path = require('path');
 const faker = require('faker');
 
-/* SET TO THE MOUNT POINT FOR LOADING YOUR CSV INTO SQL */
-const directory = path.join(__dirname, '..', 'sampleData');
-
-/* CHANGE THIS --V-- FOR THE # OF LISTING (ET AL) FILES TO CREATE */
-const fileCount = 100;
+/* CHANGE THIS --V-- FOR THE # OF LISTING FILES TO CREATE */
+const fileCount = 50;
 
 /* CHANGE THIS --V-- FOR THE # OF ROWS PER FILE */
-const rowCount = 100000;
+const rowCount = 200;
 
 /* CHANGE THIS --V-- TO MAKE MORE USERS */
 const userCount = 800000;
@@ -22,13 +19,14 @@ const userCount = 800000;
 const userFormat = '0'.repeat(String(userCount).length);
 const fileFormat = '0'.repeat(String(fileCount).length);
 const listingFormat = '0'.repeat(String(fileCount * rowCount).length);
-const reviewFormat = '0'.repeat(String(fileCount * rowCount).length + 1);
 
 /* OTHER REQUIRED DECLARATIONS */
 
 const categories = ['Responsive host', 'Great location', 'Helpful host', 'Comfortable beds', 'Easy check-in', 'Great views', 'A quiet neighborhood', 'Central location', 'Thoughtful touches', 'Friendly host', 'Great restaurants'];
 
-let reviewIndex = 1;
+const ratingStrs = ['cleanliness', 'communication', 'check_in', 'accuracy', 'location', 'value'];
+
+const users = {};
 
 /* HELPER FUNCTIONS */
 
@@ -37,116 +35,94 @@ const setFormat = (format, index) => {
   return format.slice(0, format.length - indexLength).concat(index);
 };
 
-const generateRatings = (id) => {
+const generateRatings = () => {
   const ratings = [];
-  ratings.push(id);
   for (let i = 0; i < 6; i += 1) {
-    ratings.push(Number.parseFloat(`4.${String(faker.random.number({ max: 9, min: 0 }))}`));
+    ratings.push({
+      title: ratingStrs[i],
+      rating: Number.parseFloat(`4.${String(faker.random.number({ max: 9, min: 0 }))}`),
+    });
   }
   return ratings;
 };
 
-const generateCategories = (listing_id, num_review) => {
+const generateCategories = (count) => {
   const cats = [];
-  cats.push(listing_id);
   for (let i = 0; i < 11; i += 1) {
-    cats.push(faker.random.number({ max: num_review }));
+    cats.push({
+      title: categories[i],
+      count: faker.random.number({ max: count }),
+    });
   }
   return cats;
 };
 
-const generateReviews = (count, listing_id) => {
+const generateReviews = (count) => {
   let lastDate = faker.date.recent();
   const reviews = [];
   for (let k = 0; k < count; k += 1) {
     const userIdRandomizer = Math.floor(Math.random() * userCount);
-    const review_id = setFormat(reviewFormat, reviewIndex);
+    const user_info = {};
     const user_id = setFormat(userFormat, userIdRandomizer);
+    if (users[userIdRandomizer] === undefined) {
+      user_info.user_id = user_id;
+      user_info.firstName = faker.name.firstName();
+      user_info.lastName = faker.name.lastName();
+      user_info.profileUrl = `https://erictnv.com/user/show/${user_id}`;
+      user_info.pictureUrl = `https://static-sdc-jon.s3.us-east-2.amazonaws.com/images/images/image${Math.floor(Math.random() * 1000)}.jpg`;
+      users[userIdRandomizer] = user_info;
+    } else {
+      const user = users[userIdRandomizer];
+      const keys = Object.keys(user);
+      for (let j = 0; j < keys.length; j += 1) {
+        user_info[keys[j]] = user[keys[j]];
+      }
+    }
     const bodyText = faker.lorem.paragraph();
     const entry_date = faker.date.past(null, lastDate);
     lastDate = entry_date;
     const categoryIndex = Math.floor(Math.random() * 11);
     const category = categories[categoryIndex];
-    reviews.push(`${review_id},${user_id},${listing_id},${bodyText},${entry_date},${category}`);
-    reviewIndex += 1;
+    reviews.push({
+      user_info,
+      bodyText,
+      entry_date,
+      category,
+    });
   }
   return reviews;
 };
 
-/* GENERATE USERS: THE FIRST OF TWO INDEPENDENT DATA GENERATION SCRIPTS */
+// MAIN FUNCTION
 
-// eslint-disable-next-line no-unused-vars
-const generateUsers = () => {
-  const ws = fs.createWriteStream(`${directory}/users.csv`);
-  ws.write('user_id, firstName, lastName, profileUrl, pictureUrl\n', 'utf-8');
-  for (let i = 1; i < userCount; i += 1) {
-    const userId = setFormat(userFormat, i);
-    const firstName = faker.name.firstName();
-    const lastName = faker.name.lastName();
-    const profileUrl = `https://erictnv.com/user/show/${userId}`;
-    const pictureUrl = `https://static-sdc-jon.s3.us-east-2.amazonaws.com/images/images/image${Math.floor(Math.random() * 1000)}.jpg`;
-    ws.write(`${userId},${firstName},${lastName},${profileUrl},${pictureUrl}\n`, 'utf-8');
-  }
-  ws.close();
-  console.log(`Generated ${userCount} users...`);
-};
-
-/* TOGGLE THE FOLLOWING TO GENERATE USERS WHEN RUNNING FILE */
-generateUsers();
-
-/* GENERATE LISTINGS: THE SECOND OF TWO INDEPENDENT DATA GENERATION SCRIPTS
-  ^^^^^^^^REMEBER TO GENERATE USERS FIRST ^^^^^^^ */
-
-// eslint-disable-next-line no-unused-vars
 const generateListings = (i) => {
-  // FILE SUFFIX NEEDED FOR WRITE STREAMS
   const fileSuffix = `${setFormat(fileFormat, i + 1)}.csv`;
-  // CREATE WRITE STREAMS FOR ALL FILES (-> FOR DISTINCT INSERTION TABLES)
-  const listingsWS = fs.createWriteStream(`${directory}/listings${fileSuffix}`);
-  listingsWS.write('listing_id, num_reviews, overall_rating_avg\n', 'utf-8');
-
-  const reviewsWS = fs.createWriteStream(`${directory}/reviews${fileSuffix}`);
-  reviewsWS.write('review_id, user_id, listing_id, rating, body, entry_date, category\n', 'utf-8');
-
-  const categoriesWS = fs.createWriteStream(`${directory}/categories${fileSuffix}`);
-  categoriesWS.write('r_h, g_l, h_h, c_b, e_c_i, g_v, a_q_n, c_l, t_t, f_h, g_r\n', 'utf-8');
-
-  const ratingsWS = fs.createWriteStream(`${directory}/ratings${fileSuffix}`);
-  ratingsWS.write('review_id, cleanliness, communication, check_in, accuracy, location, value\n', 'utf-8');
+  const listingsWS = fs.createWriteStream(`/var/lib/postgresql/erictnvData/listings${fileSuffix}`);
+  listingsWS.write('listing_id, num_reviews, all_reviews, review_categories, review_ratings, overall_rating_avg\n', 'utf-8');
 
   for (let j = 1; j <= rowCount; j += 1) {
-    const listing_id = setFormat(listingFormat, i * rowCount + j);
+    const id = setFormat(listingFormat, i * rowCount + j);
     const num_review = Math.floor(Math.random() * 11) + 5;
+    const reviews = generateReviews(num_review);
+    const ratings = generateRatings();
+    const categories_here = generateCategories(num_review);
 
-    const reviews = generateReviews(num_review, listing_id);
-    for (let k = 0; k < reviews.length; k += 1) {
-      reviewsWS.write(`${reviews[k]}\n`, 'utf-8');
-    }
-
-    const ratings = generateRatings(listing_id);
-    ratingsWS.write(`${ratings.join(',')}\n`, 'utf-8');
-
-    const categories_here = generateCategories(listing_id, num_review);
-    categoriesWS.write(`${categories_here}\n`, 'utf-8');
     let overall_rating = 0.0;
-    for (let k = 1; k < ratings.length; k += 1) {
-      overall_rating += ratings[k];
-    }
+    ratings.forEach((each_rating) => {
+      overall_rating += each_rating.rating;
+    });
     overall_rating = Number.parseFloat(overall_rating / 6).toPrecision(2);
-    listingsWS.write(`${listing_id},${num_review},${overall_rating}\n`, 'utf-8');
+
+    listingsWS.write(`${id}|${num_review}|${JSON.stringify(reviews)}|${JSON.stringify(categories_here)}|${JSON.stringify(ratings)}|${overall_rating}\n`, 'utf-8');
   }
   console.log(`Completed ${i + 1} loops so far`);
-  ratingsWS.end();
-  categoriesWS.end();
-  reviewsWS.end();
   listingsWS.end();
-
-  return 'Done';
 };
 
-/* TOGGLE THE FOLLOWING (COMMENT/UNCOMMENT) TO GENERATE LISTINGS AND DEPENDENT OBJECTS WHEN RUNNING FILE */
+// LOOPING FOR MEMORY MANAGEMENT
 
-let loops = 0;
+let loops = 1;
+generateListings(0);
 setInterval(() => {
   if (loops < fileCount) {
     generateListings(loops);
@@ -154,4 +130,4 @@ setInterval(() => {
   } else {
     console.log('Done');
   }
-}, 0.08 * rowCount);
+}, 0.02 * rowCount);

@@ -108,3 +108,4 @@ imageLoader.js
 # images
 database/images
 sdc/sampleData/*.*
+*.bk
