@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 /* eslint-disable import/no-unresolved */
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { sleep } from 'k6';
 import { Trend, Rate, Counter } from 'k6/metrics';
 
 export const TrendRTT = new Trend('RTT');
