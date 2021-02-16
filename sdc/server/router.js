@@ -16,8 +16,7 @@ router.get('/:propertyId/reviews', async (req, res) => {
   listing.review_categories = [];
   listing.review_ratings = [];
 
-  const reviews = (await db.query('select DISTINCT ON (a.user_id) a.user_id, a.firstName, a.lastName, a.profileUrl, a.pictureUrl, b.body, b.entry_date, b.category from users.user a inner join users.review b on (a.user_id = b.user_id) AND (b.listing_id = $1);', [propertyId]));
-  reviews.then((results) => {
+  await db.query('select DISTINCT ON (a.user_id) a.user_id, a.firstName, a.lastName, a.profileUrl, a.pictureUrl, b.body, b.entry_date, b.category from users.user a inner join users.review b on (a.user_id = b.user_id) AND (b.listing_id = $1);', [propertyId]).then((results) => {
     for (let i = 0; i < results.rows.length; i += 1) {
       listing.all_reviews.push({
         user_info: {

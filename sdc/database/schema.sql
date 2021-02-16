@@ -71,6 +71,10 @@ ALTER TABLE users.review ADD PRIMARY KEY (review_id);
 ALTER TABLE listings.listing ADD PRIMARY KEY (listing_id);
 ALTER TABLE listings.categories ADD PRIMARY KEY (listing_id);
 ALTER TABLE listings.ratings ADD PRIMARY KEY (listing_id);
+ALTER TABLE users.review ADD FOREIGN KEY (listing_id) REFERENCES listings.listing(listing_id);
+ALTER TABLE users.review ADD FOREIGN KEY (user_id) REFERENCES users.user(user_id);
+ALTER TABLE listings.categories ADD FOREIGN KEY (listing_id) REFERENCES listings.listing(listing_id);
+ALTER TABLE listings.ratings ADD FOREIGN KEY (listing_id) REFERENCES listings.listing(listing_id);
 
 CREATE UNIQUE INDEX listings_idx ON listings.listing (listing_id);
 CREATE UNIQUE INDEX users_idx ON users.user (user_id);
