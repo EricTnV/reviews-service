@@ -14,15 +14,15 @@ export const options = {
     'Content OK': ['rate>0.95'],
   },
   stages: [
-    { duration: '30s', target: 1000 },
-    { duration: '1m30s', target: 500 },
+    { duration: '30s', target: 10 },
+    { duration: '1m30s', target: 5 },
     { duration: '20s', target: 0 },
   ],
 };
 
 export default function () {
   const random = Math.floor(Math.random() * 10000000);
-  const path = `http://127.0.0.1:3002/?propertyId=${random}`;
+  const path = `http://127.0.0.1:3002/api/rooms/${random}/reviews`;
   const res = http.get(path, { tags: { name: 'PostsItemURL' } });
   const contentOK = res.status === 200;
   TrendRTT.add(res.timings.duration);

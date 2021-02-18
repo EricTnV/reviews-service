@@ -109,3 +109,4 @@ imageLoader.js
 database/images
 sdc/sampleData/*.*
 *.bk
+erictnv.sql

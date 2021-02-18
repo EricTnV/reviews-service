@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS erictnv;
 
+USE erictnv;
+
 CREATE SCHEMA IF NOT EXISTS listings;
 
 CREATE SCHEMA IF NOT EXISTS users;
@@ -43,10 +45,10 @@ CREATE TABLE IF NOT EXISTS listings.categories(
   t_t SMALLINT NOT NULL,
   f_h SMALLINT NOT NULL,
   g_r SMALLINT NOT NULL/* ,
-  FOREIGN KEY (listing_id) REFERENCES listings.reviews(listing_id)
+  FOREIGN KEY (listing_id) REFERENCES users.review(listing_id)
  */);
 
-CREATE TABLE IF NOT EXISTS listing.review(
+CREATE TABLE IF NOT EXISTS users.review(
   review_id INTEGER /* PRIMARY KEY */ NOT NULL,
   user_id INTEGER NOT NULL,
   firstName VARCHAR(50) NOT NULL,
@@ -61,7 +63,7 @@ CREATE TABLE IF NOT EXISTS listing.review(
   FOREIGN KEY (listing_id) REFERENCES listings.listing(listing_id) */
 );
 
-CREATE USER IF NOT EXISTS ubuntu WITH PASSWORD 'ubuntu'
+CREATE USER ubuntu WITH PASSWORD 'ubuntu';
 
 GRANT ALL ON SCHEMA listings TO ubuntu;
 GRANT ALL ON SCHEMA users TO ubuntu;

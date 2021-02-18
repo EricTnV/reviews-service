@@ -36,18 +36,20 @@ router.get('/:propertyId/reviews', async (req, res) => {
   const categoriesHere = (await db.query('SELECT * from listings.categories WHERE (listing_id = $1)', [propertyId]).catch((err) => console.log(err))).rows[0];
   const catVals = Object.values(categoriesHere);
   for (let i = 0; i < catVals.length; i += 1) {
-    listing.review_categories.push({
-      title: categories[i],
-      count: catVals[i].count,
-    });
+    if (catVals[i + 1] !== 0) {
+      listing.review_categories.push({
+        title: categories[i],
+        count: catVals[i + 1],
+      });
+    }
   }
 
   const ratings = (await db.query('SELECT * from listings.ratings WHERE (listing_id = $1)', [propertyId]).catch((err) => console.log(err))).rows[0];
   const ratKeys = Object.keys(ratings);
-  for (let i = 0; i < Object.keys(ratings).length; i += 1) {
+  for (let i = 1; i < Object.keys(ratings).length; i += 1) {
     listing.review_ratings.push({
       title: ratKeys[i],
-      rating: ratings[i],
+      rating: ratings[ratKeys[i]],
     });
   }
 
